@@ -47,7 +47,7 @@ function App() {
     content=<p>{error}</p>
   }
   if (isLoading) {
-    content = <p>Loading...</p>;
+    content = <p>Loading...</p>
   }
   //this is advance version of line 53 to 56 end
   return (
