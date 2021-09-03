@@ -13,23 +13,23 @@ function App() {
     setIsLoading(true);
     try {
       setError(null);
-      const response = await fetch('https://react-http-2cbaf-default-rtdb.asia-southeast1.firebasedatabase.app/movies.json', method : {
-        
-      })
+      const response = await fetch('https://react-http-2cbaf-default-rtdb.asia-southeast1.firebasedatabase.app/movies.json')
       if(!response.ok) {
         throw new Error("something went wrong")
       }
       const data= await response.json();
-    
-        const transformedData=data.results.map(movieData=> {
-          return {
-            id: movieData.episode_id,
-            title: movieData.title,
-            releaseDate:movieData.release_date,
-            openingText:movieData.opening_crawl
-          }
+      const loadedMovies=[];
+      for(const key in data) {
+        loadedMovies.push({
+          id: key,
+          title: data[key].title,
+          openingText: data[key].openingText,
+          releaseDate: data[key].releaseDate
         })
-        setMovies(transformedData);
+      }
+       console.log(data)
+       
+        setMovies(loadedMovies);
        
     } catch (error) {
       setError(error.message)
@@ -41,8 +41,16 @@ function App() {
     fetchMovieHandler();
   }, [fetchMovieHandler])
 
-  function addMovieHandler(movie) {
-    console.log(movie);
+  async function addMovieHandler(movie) {
+    const response = await fetch('https://react-http-2cbaf-default-rtdb.asia-southeast1.firebasedatabase.app/movies.json', {
+             method: 'POST',
+             body: JSON.stringify(movie),
+             headers: {
+               'Content-type':'application/json'
+             }
+      });
+      const data= await response.json();
+      console.log(data);
   }
 
   //this is advance version of line 53 to 56 start
